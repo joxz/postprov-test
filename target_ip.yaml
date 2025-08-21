@@ -13,8 +13,18 @@
         groups: remote_targets
         ansible_host: "{{ target_host }}"
         ansible_connection: ssh
+        ansible_ssh_user: ansible
       changed_when: false
       when: target_host is defined
+
+    - name: Show all hosts in the 'all' group
+      debug:
+        msg: "{{ groups['all'] }}"
+
+    - name: Show each host and its ansible_host variable
+      debug:
+        msg: "Host {{ item }} has ansible_host={{ hostvars[item].ansible_host | default('N/A') }}"
+      loop: "{{ groups['all'] }}"
 
 - name: Perform tasks on the dynamic target host
   hosts: remote_targets
