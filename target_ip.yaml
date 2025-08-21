@@ -11,8 +11,8 @@
       ansible.builtin.add_host:
         name: "{{ target_host }}"
         groups: remote_targets
-        ansible_connection: ssh
         ansible_host: "{{ target_host }}"
+        ansible_connection: ssh
       changed_when: false
       when: target_host is defined
 
@@ -20,6 +20,12 @@
   hosts: remote_targets
   gather_facts: true
   tasks:
+    - name: Debug connection variables
+      debug:
+        msg:
+          - "ansible_user={{ ansible_user | default('not set') }}"
+          - "ansible_connection={{ ansible_connection | default('not set') }}"
+          - "ansible_host={{ ansible_host | default('not set') }}"
     - name: Ping the host to verify connectivity
       ansible.builtin.ping:
 
