@@ -1,0 +1,40 @@
+---
+- name: Prepare for execution on a dynamic host
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Fail if target_host variable is not provided
+      ansible.builtin.fail:
+        msg: "The 'target_host' variable was not defined. This playbook requires it to be passed as an extra variable."
+      when: target_host is not defined
+
+    - name: Add the API-specified host to our inventory
+      ansible.builtin.add_host:
+        name: "{{ target_host }}"
+        groups: remote_targets
+      changed_when: false
+      when: target_host is defined
+
+- name: Perform tasks on the dynamic target host
+  hosts: remote_targets
+  gather_facts: true
+  tasks:
+    - name: Ping the host to verify connectivity
+      ansible.builtin.ping:
+
+    - name: Print the Fully Qualified Domain Name (FQDN) of the target
+      ansible.builtin.debug:
+        msg: "Successfully connected to {{ ansible_fqdn }}."
+    
+    - name: Print all gathered facts
+      debug:
+        var: ansible_facts
+
+    - name: Check the system uptime
+      ansible.builtin.command:
+        cmd: hostname
+      register: hostname_result
+
+    - name: Display the uptime
+      ansible.builtin.debug:
+        var: hostname_result.stdout
