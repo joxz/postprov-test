@@ -11,6 +11,7 @@
       ansible.builtin.add_host:
         name: "{{ target_host }}"
         groups: remote_targets
+        ansible_connection: ssh
       changed_when: false
       when: target_host is defined
 
