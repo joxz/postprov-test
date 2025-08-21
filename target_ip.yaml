@@ -12,6 +12,7 @@
         name: "{{ target_host }}"
         groups: remote_targets
         ansible_connection: ssh
+        ansible_host: "{{ target_host }}"
       changed_when: false
       when: target_host is defined
 
