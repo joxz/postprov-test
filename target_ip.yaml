@@ -1,4 +1,3 @@
----
 - name: Prepare for execution on a dynamic host
   hosts: localhost
   gather_facts: false
@@ -25,16 +24,16 @@
     - name: Print the Fully Qualified Domain Name (FQDN) of the target
       ansible.builtin.debug:
         msg: "Successfully connected to {{ ansible_fqdn }}."
-    
+
     - name: Print all gathered facts
       debug:
         var: ansible_facts
 
-    - name: Check the system uptime
+    - name: Check the hostname
       ansible.builtin.command:
         cmd: hostname
       register: hostname_result
 
-    - name: Display the uptime
+    - name: Display the hostname
       ansible.builtin.debug:
         var: hostname_result.stdout
